@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -24,6 +24,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Modal from 'react-native-modal';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -62,12 +63,39 @@ function App(): React.JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // mount the modal and make it visible
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
+
+    // unmount the modal
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      {isVisible && (
+        <View>
+          <Modal
+            isVisible
+            onModalHide={() => {
+              console.log('onModalHide called');
+            }}>
+            <View style={{flex: 1}}>
+              <Text>I am the modal content!</Text>
+            </View>
+          </Modal>
+        </View>
+      )}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
